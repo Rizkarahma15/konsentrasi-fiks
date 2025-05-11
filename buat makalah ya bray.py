@@ -45,7 +45,7 @@ def main():
     st.markdown("""
         <style>
         .stApp {
-            background: linear-gradient(135deg, #ff69b4, #add8e6, #800080); /* Gradasi pink, biru, ungu */
+            background: linear-gradient(135deg, #FFB6C1, #B0E0E6);
             font-family: 'Comic Sans MS', cursive, sans-serif;
         }
         h1 {
