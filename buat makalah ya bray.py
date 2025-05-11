@@ -24,12 +24,6 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     b = (n * sum_xy - sum_x * sum_y) / denominator
     a = (sum_y - b * sum_x) / n
 
-    r_denominator = np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
-    if r_denominator == 0:
-        r = 0
-    else:
-        r = (n * sum_xy - sum_x * sum_y) / r_denominator
-
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
     return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
 
