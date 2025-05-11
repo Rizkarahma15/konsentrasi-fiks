@@ -90,7 +90,7 @@ def main():
     """)
 
     st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [1.0, 2.0, 3.0, 4.0], 'Y': [2.0, 4.0, 6.0, 8.0]})  # Default data
+    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  # Default data
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
     var_name_x = st.text_input('Nama variabel X:', 'x')
@@ -104,8 +104,6 @@ def main():
 
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
-            elif np.all(X == X[0]):
-                st.warning("⚠️ Semua nilai X sama. Tidak bisa menghitung regresi linear.")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
