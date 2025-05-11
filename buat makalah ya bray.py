@@ -2,15 +2,14 @@ import os
 import streamlit as st
 import numpy as np
 import pandas as pd
-
-
+import matplotlib.pyplot as plt  # WAJIB agar grafik muncul
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
     with open('requirements.txt', 'w') as f:
         f.write("streamlit\nnumpy\npandas\nmatplotlib\nPillow\n")
 
-# Fungsi regresi dengan penanganan error
+# Fungsi regresi
 def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     n = len(X)
     if n < 2:
