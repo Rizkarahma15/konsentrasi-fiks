@@ -129,8 +129,7 @@ def main():
                     if b != 0:
                         x_calc = (y_input - a) / b
                         st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
-                    else:
-                        st.error("Slope (b) = 0, tidak bisa menghitung X.")
+                   
         except Exception as e:
             st.error(f"❌ Terjadi kesalahan: {e}")
     else:
