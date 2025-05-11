@@ -21,10 +21,6 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     sum_x_squared = np.sum(X**2)
     sum_y_squared = np.sum(Y**2)
 
-    denominator = (n * sum_x_squared - sum_x**2)
-    if denominator == 0:
-        raise ZeroDivisionError("Pembagi dalam perhitungan slope bernilai nol. Pastikan data X tidak sama semua.")
-
     b = (n * sum_xy - sum_x * sum_y) / denominator
     a = (sum_y - b * sum_x) / n
 
