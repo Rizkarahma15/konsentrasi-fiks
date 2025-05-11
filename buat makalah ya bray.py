@@ -90,12 +90,13 @@ def main():
     """)
 
     st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [0.0]*4, 'Y': [0.0]*4})
+    default_data = pd.DataFrame({'X': [1.0, 2.0, 3.0, 4.0], 'Y': [2.0, 4.0, 6.0, 8.0]})  # Default data
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
     var_name_x = st.text_input('Nama variabel X:', 'x')
     var_name_y = st.text_input('Nama variabel Y:', 'y')
 
+    # Menampilkan grafik, persamaan regresi, dan kolom input untuk Y agar bisa hitung X
     if not data_df.empty and 'X' in data_df.columns and 'Y' in data_df.columns:
         try:
             X = data_df['X'].astype(float).to_numpy()
