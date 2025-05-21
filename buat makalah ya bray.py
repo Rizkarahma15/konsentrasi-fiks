@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt  # WAJIB agar grafik muncul
+import matplotlib.pyplot as plt
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
@@ -39,9 +39,8 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
 
 def main():
     st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi Deret Standar ✨')
-    st.write('Penentuan konsentrasi dari persamaan regresi deret standar yang dapat memudahkan analisis tanpa perlu menghitung secara manual. ENJOY FOR ACCESS 🧪👩‍🔬')
 
-    # Gradasi CSS
+    # CSS
     st.markdown("""
         <style>
         .stApp {
@@ -74,11 +73,11 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    # Tampilkan gambar
+    # Gambar
     img_url = "https://i.imgur.com/ZCCw6Ry.jpg"
     st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
 
-    # Perkenalan
+    # Tim
     st.header("INTRODUCTION OUR TEAM")
     st.subheader("👥 Kelompok 11 (E2-PMIP)")
     st.write("""
@@ -89,39 +88,36 @@ def main():
     5. Dinda Aryantika (2320520)
     """)
 
+    # Input variabel
     st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  # Default data
+    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
-
     var_name_x = st.text_input('Nama variabel X:', 'x')
     var_name_y = st.text_input('Nama variabel Y:', 'y')
 
-    # Menampilkan grafik, persamaan regresi, dan kolom input untuk Y agar bisa hitung X
-    if not data_df.empty and 'X' in data_df.columns and 'Y' in data_df.columns:
+    # Tempat simpan regresi
+    if 'regresi' not in st.session_state:
+        st.session_state.regresi = None
+
+    # Tombol hitung regresi
+    if st.button("📌 Hitung Regresi"):
         try:
             X = data_df['X'].astype(float).to_numpy()
             Y = data_df['Y'].astype(float).to_numpy()
 
             if len(X) < 2:
-                st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
+                st.warning("⚠️ Minimal diperlukan 2 titik data.")
             elif np.all(X == X[0]):
-                st.warning("""
-📝 **Petunjuk Penggunaan:**  
-Silakan isi data X dan Y terlebih dahulu pada tabel di atas. Setelah data dimasukkan, aplikasi akan secara otomatis menampilkan:  
-✅ Grafik regresi linear  
-✅ Persamaan regresi  
-✅ Koefisien korelasi  
-
-Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghitung nilai X (konsentrasi) dengan cepat dan akurat.
-""")
+                st.warning("📝 Nilai X harus bervariasi.")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
+                st.session_state.regresi = reg
 
-                st.markdown("## Hasil Regresi:")
-                st.markdown(f"### 📌 {reg['equation']}")
-                st.write(f"Slope (b): {reg['slope']:.2f}")
+                st.subheader("📉 Hasil Regresi:")
+                st.markdown(f"**Persamaan:** {reg['equation']}")
                 st.write(f"Intercept (a): {reg['intercept']:.2f}")
-                st.write(f"Koefisien Korelasi (r): {reg['r_value']:.4f}")
+                st.write(f"Slope (b): {reg['slope']:.2f}")
+                st.write(f"Koefisien korelasi (r): {reg['r_value']:.4f}")
 
                 # Grafik
                 fig, ax = plt.subplots()
@@ -133,22 +129,25 @@ Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghit
                 ax.legend()
                 st.pyplot(fig)
 
-                # Kalkulasi berdasarkan Y
-                st.header("📊 Hitung Nilai X Berdasarkan Y")
-                y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
-
-                if y_input is not None:
-                    b = reg['slope']
-                    a = reg['intercept']
-                    if b != 0:
-                        x_calc = (y_input - a) / b
-                        st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
-                    else:
-                        st.error("Slope (b) = 0, tidak bisa menghitung X.")
         except Exception as e:
-            st.error(f"❌ Terjadi kesalahan: {e}")
-    else:
-        st.warning("⚠️ Harap masukkan data X dan Y yang valid.")
+            st.error(f"❌ Error: {e}")
+
+    # Input & tombol hitung konsentrasi
+    st.header("🧪 Hitung Konsentrasi dari Nilai Y")
+    y_input = st.number_input(f'Masukkan nilai {var_name_y} (Y):', value=0.0, format="%.4f")
+
+    if st.button("🔍 Hitung Konsentrasi (X)"):
+        reg = st.session_state.get('regresi', None)
+        if reg:
+            b = reg['slope']
+            a = reg['intercept']
+            if b != 0:
+                x_calc = (y_input - a) / b
+                st.success(f"Hasil: {var_name_x} = {x_calc:.4f}")
+            else:
+                st.error("Slope = 0, tidak bisa menghitung X.")
+        else:
+            st.warning("⚠️ Silakan hitung regresi terlebih dahulu.")
 
 # Jalankan aplikasi
 if __name__ == '__main__':
