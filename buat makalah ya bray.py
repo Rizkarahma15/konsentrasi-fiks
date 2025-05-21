@@ -81,7 +81,6 @@ def main():
     # Perkenalan
     st.header("INTRODUCTION OUR TEAM")
     st.subheader("👥 Kelompok 11 (E2-PMIP)")
-
     st.write("""
     1. Kayla Nurrahma Siswoyo (2420606)  
     2. Nahda Rensa Subari (2420632)  
@@ -91,9 +90,7 @@ def main():
     """)
 
     st.header("📈 Kalkulator Regresi Linear")
-    
-    # Data default 0
-    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  
+    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  # Default data
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
     var_name_x = st.text_input('Nama variabel X:', 'x')
@@ -108,7 +105,15 @@ def main():
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
             elif np.all(X == X[0]):
-                st.warning("⚠️ Semua nilai X sama. Tidak bisa menghitung regresi linear.")
+                st.warning("""
+📝 **Petunjuk Penggunaan:**  
+Silakan isi data X dan Y terlebih dahulu pada tabel di atas. Setelah data dimasukkan, aplikasi akan secara otomatis menampilkan:  
+✅ Grafik regresi linear  
+✅ Persamaan regresi  
+✅ Koefisien korelasi  
+
+Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghitung nilai X (konsentrasi) dengan cepat dan akurat.
+""")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
