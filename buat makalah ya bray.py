@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt  # WAJIB agar grafik muncul
+import matplotlib.pyplot as plt
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
@@ -29,10 +29,7 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     a = (sum_y - b * sum_x) / n
 
     r_denominator = np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
-    if r_denominator == 0:
-        r = 0
-    else:
-        r = (n * sum_xy - sum_x * sum_y) / r_denominator
+    r = (n * sum_xy - sum_x * sum_y) / r_denominator if r_denominator != 0 else 0
 
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
     return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
@@ -41,40 +38,28 @@ def main():
     st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi Deret Standar ✨')
     st.write('Penentuan konsentrasi dari persamaan regresi deret standar yang dapat memudahkan analisis tanpa perlu menghitung secara manual. ENJOY FOR ACCESS 🧪👩‍🔬')
 
-    # Gradasi CSS
+    # CSS background dan balon
     st.markdown("""
         <style>
         .stApp {
             background: linear-gradient(135deg, #FFB6C1, #B0E0E6);
             font-family: 'Comic Sans MS', cursive, sans-serif;
         }
-        h1 {
-            text-align: center;
-            color: #8B4513;
-            animation: floating 3s ease-in-out infinite;
+        .balloons {
+            position: fixed;
+            bottom: -100px;
+            width: 100%;
+            z-index: 999;
+            animation: flyUp 10s linear infinite;
         }
-        @keyframes floating {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        .floating-image {
-            width: 60%;
-            display: block;
-            margin: auto;
-            animation: float 4s ease-in-out infinite;
-            border-radius: 20px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+        @keyframes flyUp {
+            0% { bottom: -100px; opacity: 0; }
+            10% { opacity: 1; }
+            100% { bottom: 110%; opacity: 0; }
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # Gambar dan Tim
     img_url = "https://i.imgur.com/ZCCw6Ry.jpg"
     st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
 
@@ -104,23 +89,22 @@ def main():
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
             elif np.all(X == X[0]):
-                st.warning("""
-📝 **Petunjuk Penggunaan:**  
-Silakan isi data X dan Y terlebih dahulu pada tabel di atas. Setelah data dimasukkan, aplikasi akan secara otomatis menampilkan:  
-✅ Grafik regresi linear  
-✅ Persamaan regresi  
-✅ Koefisien korelasi  
-
-Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghitung nilai X (konsentrasi) dengan cepat dan akurat.
-""")
+                st.warning("Silakan isi nilai X yang berbeda agar regresi bisa dihitung.")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
-                st.markdown("## Hasil Regresi:")
+                st.markdown("## 🎯 Hasil Regresi:")
                 st.markdown(f"### 📌 {reg['equation']}")
                 st.write(f"Slope (b): {reg['slope']:.2f}")
                 st.write(f"Intercept (a): {reg['intercept']:.2f}")
                 st.write(f"Koefisien Korelasi (r): {reg['r_value']:.4f}")
+
+                # 🎈 BALON muncul setelah grafik
+                st.markdown("""
+                <div class="balloons">
+                    🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈 🎈
+                </div>
+                """, unsafe_allow_html=True)
 
                 # Grafik
                 fig, ax = plt.subplots()
