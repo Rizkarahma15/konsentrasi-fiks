@@ -134,12 +134,8 @@ Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghit
 
                 # Kalkulasi berdasarkan Y
                 st.header("📊 Hitung Nilai X Berdasarkan Y")
-
-                col1, col2 = st.columns([3, 1])
-                with col1:
-                    y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
-                with col2:
-                    tombol_hitung = st.button("🔍 Hitung")
+                y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
+                tombol_hitung = st.button("🔍 Hitung")
 
                 if tombol_hitung:
                     b = reg['slope']
